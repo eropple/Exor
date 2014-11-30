@@ -1,0 +1,30 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EdCanHack.Exor.Core</id>
+    <version>$version$</version>
+    <title>EdCanHack.Exor.Core (Portable)</title>
+    <authors>Ed Ropple</authors>
+    <owners>Ed Ropple</owners>
+    <licenseUrl>https://github.com/eropple/Exor/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/eropple/Exor</projectUrl>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>
+        Exor.Core is a simple, attribute-driven extension framework, implemented as a PCL.
+    </summary>
+    <description>
+        Exor.Core is a simple, attribute-driven extension framework. Implemented as a PCL
+        for cross-platform usage, Exor.Core allows you to define type mappings in a deferred
+        manner, i.e. types defined in BaseModule can be subclassed in AddinModule and
+        those subtypes loaded in response to a string-based attribute key.
+    </description>
+    <releaseNotes>
+      Initial release.
+    </releaseNotes>
+    <copyright>Copyright 2014 Ed Ropple</copyright>
+    <tags>extension addins reflection dependency resolution pcl portable</tags>
+    <dependencies>
+    </dependencies>
+  </metadata>
+</package>

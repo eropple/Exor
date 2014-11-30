@@ -1,0 +1,36 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EdCanHack.Exor.Compiler</id>
+    <version>$version$</version>
+    <title>EdCanHack.Exor.Compiler</title>
+    <authors>Ed Ropple</authors>
+    <owners>Ed Ropple</owners>
+    <licenseUrl>https://github.com/eropple/Exor/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/eropple/Exor</projectUrl>
+    <!--<iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>
+      Exor.Compiler is a runtime compiler and ExtensionLoader factory for Exor.Core.
+    </summary>
+    <description>
+        Exor.Compiler is a runtime compiler and ExtensionLoader factory. Intended for
+        runtime compilation of game scripts written in C#, Exor.Compiler allows a game to
+        pack "loose" .cs files and compile them for inclusion in the game's ExtensionLoader.
+        Using Exor.Compiler on desktops, where CSharpCodeProvider is available, allows
+        you (and your community) to trivially extend your projects. At the same time, the
+        same code used in the dynamic loader on desktops can be added statically for
+        platforms such as iOS where dynamic code loading isn't allowed--making mods on
+        desktops easy without making life harder when you need to port to iOS, XBox One, or
+        the PlayStation 4.
+    </description>
+    <releaseNotes>
+        Initial release.
+    </releaseNotes>
+    <copyright>Copyright 2014 Ed Ropple</copyright>
+    <tags>extension addins reflection dependency resolution compiler csharp</tags>
+    <dependencies>
+        <dependency id="EdCanHack.Exor.Core" version="$version$" />
+    </dependencies>
+  </metadata>
+</package>
