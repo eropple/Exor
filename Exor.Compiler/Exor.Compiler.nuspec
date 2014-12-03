@@ -25,12 +25,12 @@
         the PlayStation 4.
     </description>
     <releaseNotes>
-        Initial release.
+        Updated to use Versioner 2.0.0.
     </releaseNotes>
     <copyright>Copyright 2014 Ed Ropple</copyright>
     <tags>extension addins reflection dependency resolution compiler csharp</tags>
     <dependencies>
-        <dependency id="EdCanHack.Exor.Core" version="$version$" />
+        <dependency id="EdCanHack.Exor.Core" version="[1.0.0, 2.0.0)" />
     </dependencies>
   </metadata>
 </package>
