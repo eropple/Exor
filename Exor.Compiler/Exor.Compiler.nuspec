@@ -25,7 +25,7 @@
         the PlayStation 4.
     </description>
     <releaseNotes>
-        Updated to use Versioner 2.0.0.
+        Updated to enable PDB generation.
     </releaseNotes>
     <copyright>Copyright 2014 Ed Ropple</copyright>
     <tags>extension addins reflection dependency resolution compiler csharp</tags>

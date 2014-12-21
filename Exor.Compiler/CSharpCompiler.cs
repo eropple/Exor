@@ -115,7 +115,10 @@ namespace Exor.Compiler
                 .Concat<String>(source.Dependencies.Select(dep => CacheNameFor(dep.UniqueName)))
                 .ToArray();
 
-            var opts = new CompilerParameters(referencedAssemblies, cacheAssemblyPath, false);
+            var opts = new CompilerParameters(referencedAssemblies, cacheAssemblyPath, false)
+            {
+                IncludeDebugInformation = Options.ProvideDebugInformation
+            };
 
             var rawResult = _compiler.CompileAssemblyFromFile(opts, sourceFiles);
 
@@ -133,11 +136,15 @@ namespace Exor.Compiler
     {
         public readonly String CachePath;
         public readonly IReadOnlyList<String> UniversalAssemblies;
+        public readonly Boolean ProvideDebugInformation;
         public readonly Boolean ForceRecompile;
 
         /// <summary>
         /// Constructor.
         /// </summary>
+        /// <param name="provideDebugInformation">
+        /// If true, generate PDBs.
+        /// </param>
         /// <param name="cachePath">
         /// The path in which cached copies of compiled assemblies should be stored. If this
         /// is null, a cache name will be generated in the temporary directory. (The cache
@@ -151,8 +158,9 @@ namespace Exor.Compiler
         /// Overrides the date-checking cache behaviors of the compiler. All sources will
         /// be recompiled.
         /// </param>
-        public CSharpCompilerOptions(String cachePath = null, IEnumerable<String> universalAssemblies = null, Boolean forceRecompile = false)
+        public CSharpCompilerOptions(String cachePath = null, IEnumerable<String> universalAssemblies = null, Boolean forceRecompile = false, bool provideDebugInformation = true)
         {
+            ProvideDebugInformation = provideDebugInformation;
             ForceRecompile = forceRecompile;
             CachePath = cachePath ?? FindCachePath();
             UniversalAssemblies = (universalAssemblies ?? Enumerable.Empty<String>()).ToList();
