@@ -16,6 +16,16 @@ using Version = Versioner.Version;
 
 namespace Exor.Compiler.Tests
 {
+    [SetUpFixture]
+    public class SetUpFixture
+    {
+        [SetUp]
+        public void BeforeAllTests()
+        {
+            if (Directory.Exists(CompilerTests.CachePath)) Directory.Delete(CompilerTests.CachePath, true);
+        }
+    }
+
     [TestFixture]
     public class CompilerTests
     {
@@ -30,6 +40,8 @@ namespace Exor.Compiler.Tests
             ExtensionTypeRecord.Create<SimpleTestBase, SimpleEmptyCtorAttribute>(),
             ExtensionTypeRecord.Create<CtorTestBase, CtorTestAttribute>(typeof(Int32), typeof(DateTime))
         };
+
+        public static readonly String CachePath = Path.Combine(Path.GetTempPath(), "ExorTests");
 
         [SetUp]
         public void BeforeEachTest()
@@ -61,8 +73,9 @@ namespace Exor.Compiler.Tests
         [Test]
         public void SimpleCompile()
         {
+            Directory.CreateDirectory(CachePath);
             var compiler = new CSharpCompiler<CodeSource>(new CSharpCompilerOptions(forceRecompile: true,
-                universalAssemblies: new[] { "Exor.Core.Tests.ContentBase.dll" }));
+                universalAssemblies: new[] { "Exor.Core.Tests.ContentBase.dll" }, cachePath: Path.Combine(CachePath, "SimpleCompile")));
 
             var contentA = new CodeSource("A", Version.Parse("1.0.0"),
                 Directory.GetFiles(Path.Combine(AssetDirectory, "ContentA")).Where(f => Path.GetExtension(f) == ".cs"));
@@ -82,8 +95,9 @@ namespace Exor.Compiler.Tests
         [Test]
         public void DependentCompile()
         {
+            Directory.CreateDirectory(CachePath);
             var compiler = new CSharpCompiler<CodeSource>(new CSharpCompilerOptions(forceRecompile: true,
-                universalAssemblies: new[] { "Exor.Core.Tests.ContentBase.dll" }));
+                universalAssemblies: new[] { "Exor.Core.Tests.ContentBase.dll" }, cachePath: Path.Combine(CachePath, "DependentCompile")));
 
             var contentA = new CodeSource("A", Version.Parse("1.0.0"),
                 Directory.GetFiles(Path.Combine(AssetDirectory, "ContentA")).Where(f => Path.GetExtension(f) == ".cs"));

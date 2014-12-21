@@ -168,7 +168,15 @@ namespace Exor.Compiler
 
         private static String FindCachePath()
         {
-            return Path.Combine(Path.GetTempPath(), "Exor", Guid.NewGuid().ToString());
+            var entryAssembly = Assembly.GetEntryAssembly();
+            var segments = new String[]
+            {
+                Path.GetTempPath(),
+                entryAssembly?.GetName()?.Name,
+                entryAssembly?.GetCustomAttribute<AssemblyVersionAttribute>()?.Version
+            }.Where(s => !String.IsNullOrWhiteSpace(s)).ToArray();
+
+            return Path.Combine(segments);
         }
     }
 }
