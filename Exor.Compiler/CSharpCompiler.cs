@@ -105,7 +105,7 @@ namespace Exor.Compiler
                                 source.Dependencies.Any(dep => File.GetLastWriteTimeUtc(CacheNameFor(dep.UniqueName)) >= cacheDate);
             }
 
-            if (!mustRecompile) return new ExorCompilerResults<TCodeSource>(source, Assembly.Load(CacheNameFor(source.UniqueName)), null, new List<CompilerError>());
+            if (!mustRecompile) return new ExorCompilerResults<TCodeSource>(source, Assembly.LoadFile(CacheNameFor(source.UniqueName)), null, new List<CompilerError>());
 
             dirtySet.Add(source);
 

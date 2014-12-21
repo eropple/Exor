@@ -17,8 +17,9 @@
         Exor.Compiler is a runtime compiler and ExtensionLoader factory. Intended for runtime compilation of game scripts written in C#, Exor.Compiler allows a game to pack "loose" .cs files and compile them for inclusion in the game's ExtensionLoader. Using Exor.Compiler on desktops, where CSharpCodeProvider is available, allows you (and your community) to trivially extend your projects. At the same time, the same code used in the dynamic loader on desktops can be added statically for platforms such as iOS where dynamic code loading isn't allowed--making mods on desktops easy without making life harder when you need to port to iOS, XBox One, or the PlayStation 4.
     </description>
     <releaseNotes>
-        1.1.1: Updated to enable PDB generation.
-        1.1.2: Changed cache logic to actuallly reuse caches in the default case (instead of a GUID, breaking all saved caches).
+      1.1.2.1: Fixed a bug with loading cache logic (mistaken use of Assembly.Load instead of Assembly.LoadFile).
+      1.1.2.0: Changed cache logic to actuallly reuse caches in the default case (instead of a GUID, breaking all saved caches).
+      1.1.1.0: Updated to enable PDB generation.
     </releaseNotes>
     <copyright>Copyright 2014 Ed Ropple</copyright>
     <tags>extension addins reflection dependency resolution compiler csharp</tags>
