@@ -123,7 +123,16 @@ namespace Exor.Compiler
             var rawResult = _compiler.CompileAssemblyFromFile(opts, sourceFiles);
 
             var errorList = new List<CompilerError>(rawResult.Errors.Cast<object>().Cast<CompilerError>());
-            return new ExorCompilerResults<TCodeSource>(source, rawResult.CompiledAssembly, rawResult, errorList);
+            Assembly assembly;
+            try
+            {
+                assembly = rawResult.CompiledAssembly;
+            }
+            catch (FileNotFoundException)
+            {
+                assembly = null;
+            }
+            return new ExorCompilerResults<TCodeSource>(source, assembly, rawResult, errorList);
         }
 
         private String CacheNameFor(String name)
