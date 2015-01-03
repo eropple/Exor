@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Common.Logging;
 using Exor.Core;
 
 namespace Exor.Compiler.Loader
@@ -9,6 +10,7 @@ namespace Exor.Compiler.Loader
     public static class DynamicLoaders
     {
         public static ExtensionLoader BuildLoader<TCodeSource>(
+            ILog logger,
             IEnumerable<ExtensionTypeRecord> typeRecords,
             IEnumerable<TCodeSource> selectedSources,
             IEnumerable<TCodeSource> additionalSources = null,
@@ -35,7 +37,7 @@ namespace Exor.Compiler.Loader
                 throw new NotImplementedException("non-None inclusion strategies not yet implemented, pull requests welcome.");
             }
 
-            return new ExtensionLoader(assemblies, typeRecords, options.ThrowOnConstructorMissing);
+            return new ExtensionLoader(logger, assemblies, typeRecords, options.ThrowOnConstructorMissing);
         }
     }
 }

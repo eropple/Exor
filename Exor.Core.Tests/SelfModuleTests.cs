@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
+using Common.Logging.Simple;
 using Exon.Core.Tests.ContentBase;
 using Exor.Core;
 using Exor.Core.Tests.ContentBase;
@@ -14,6 +16,8 @@ namespace Exon.Core.Tests
     [TestFixture]
     public class SelfModuleTests
     {
+        private ILog _logger = new ConsoleOutLogger("Logs", LogLevel.All, true, false, false, "u");
+
         private readonly IEnumerable<ExtensionTypeRecord> TypeRecords = new ExtensionTypeRecord[]
         {
             ExtensionTypeRecord.Create<SimpleTestBase, SimpleEmptyCtorAttribute>(),
@@ -24,7 +28,7 @@ namespace Exon.Core.Tests
         [Test]
         public void NoContentFailure()
         {
-            var loader = new ExtensionLoader(new Assembly[] {}, TypeRecords, true);
+            var loader = new ExtensionLoader(_logger, new Assembly[] {}, TypeRecords, true);
 
             try
             {
@@ -45,7 +49,7 @@ namespace Exon.Core.Tests
                 Assembly.Load(new AssemblyName("Exor.Core.Tests.ContentA"))
             };
 
-            var loader = new ExtensionLoader(assemblies, TypeRecords, true);
+            var loader = new ExtensionLoader(_logger, assemblies, TypeRecords, true);
 
             var noCtor = loader.Load<SimpleTestBase>("A");
             Assert.IsTrue(noCtor.GetType().FullName.Contains("SimpleTestA"));
@@ -66,7 +70,7 @@ namespace Exon.Core.Tests
                 Assembly.Load(new AssemblyName("Exor.Core.Tests.ContentA"))
             };
 
-            var loader = new ExtensionLoader(assemblies, TypeRecords, true);
+            var loader = new ExtensionLoader(_logger, assemblies, TypeRecords, true);
 
             var noCtor = loader.Load<SimpleTestBase>("A");
             Assert.IsTrue(noCtor.GetType().FullName.Contains("SimpleTestB"));

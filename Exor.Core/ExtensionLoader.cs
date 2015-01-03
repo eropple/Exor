@@ -40,9 +40,9 @@ namespace Exor.Core
         /// Determines whether an exception should be thrown (and, by implication, extension loading
         /// halted) if a constructor with the given signature is not found.
         /// </param>
-        public ExtensionLoader(IEnumerable<Assembly> assemblies, IEnumerable<ExtensionTypeRecord> typeRecords, Boolean throwIfConstructorMissing = true)
+        public ExtensionLoader(ILog logger, IEnumerable<Assembly> assemblies, IEnumerable<ExtensionTypeRecord> typeRecords, Boolean throwIfConstructorMissing = true)
         {
-            _logger = LogManager.GetLogger(GetType());
+            _logger = logger;
 
             _throwIfConstructorMissing = throwIfConstructorMissing;
             var typeRecordsList = typeRecords.ToList();

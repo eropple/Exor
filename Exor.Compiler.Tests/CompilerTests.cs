@@ -6,6 +6,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Logging;
+using Common.Logging.Simple;
 using Exon.Core.Tests.ContentBase;
 using Exor.Compiler.Tests.Domain;
 using Exor.Core;
@@ -29,6 +31,8 @@ namespace Exor.Compiler.Tests
     [TestFixture]
     public class CompilerTests
     {
+        private ILog _logger;
+
         public readonly String SolutionDirectory =
             Path.Combine(Path.GetDirectoryName(AppDomain.CurrentDomain.SetupInformation.ApplicationBase), "..", "..");
 
@@ -46,6 +50,8 @@ namespace Exor.Compiler.Tests
         [SetUp]
         public void BeforeEachTest()
         {
+            _logger = new ConsoleOutLogger("Logs", LogLevel.All, true, false, false, "u");
+
             if (Directory.Exists(AssetDirectory)) Directory.Delete(AssetDirectory, true);
 
             var dict = new Dictionary<String, String>
@@ -86,7 +92,7 @@ namespace Exor.Compiler.Tests
                 Assert.Fail("Compile of ContentA failed.");
             }
 
-            var loader = new ExtensionLoader(results.Select(r => r.Assembly), TypeRecords);
+            var loader = new ExtensionLoader(_logger, results.Select(r => r.Assembly), TypeRecords);
 
             var obj = loader.Load<SimpleTestBase>("A");
             Assert.IsTrue(obj.GetType().FullName.Contains("SimpleTestA"));
@@ -123,7 +129,7 @@ namespace Exor.Compiler.Tests
             var resultsMap = results.ToDictionary(r => r.Source.UniqueName);
             var loadOrder = selected.Select(c => resultsMap[c.UniqueName].Assembly);
 
-            var loader = new ExtensionLoader(loadOrder, TypeRecords);
+            var loader = new ExtensionLoader(_logger, loadOrder, TypeRecords);
 
             var obj = loader.DeepLoad<SimpleTestBase>("A").ToList();
             Assert.IsTrue(obj[0].GetType().FullName.Contains("SimpleTestC"));

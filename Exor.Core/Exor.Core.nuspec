@@ -20,7 +20,8 @@
         those subtypes loaded in response to a string-based attribute key.
     </description>
     <releaseNotes>
-      Initial release.
+2.0.0-pre3: Minor API changes to support an update to Common.Logging 3.0.0-alpha. ExtensionLoader now requires you to pass into it an ILog.
+1.0.0: Initial release.
     </releaseNotes>
     <copyright>Copyright 2014 Ed Ropple</copyright>
     <tags>extension addins reflection dependency resolution pcl portable</tags>
