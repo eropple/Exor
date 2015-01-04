@@ -108,5 +108,27 @@ namespace Exon.Core.Tests
             Assert.IsTrue(deepMappedLoad.ContainsKey("A2"), "has key A2");
             Assert.IsTrue(deepMappedLoad["A2"][0].GetType().FullName.Contains("OtherSimpleTestA"));
         }
+
+        [Test]
+        public void FilterTest()
+        {
+            var appendString = "moop";
+            var v = new StringBuilder();
+
+            var assemblies = new[]
+            {
+                Assembly.Load(new AssemblyName("Exor.Core.Tests.ContentB")),
+                Assembly.Load(new AssemblyName("Exor.Core.Tests.ContentA"))
+            };
+
+            var loader = new ExtensionLoader(_logger, assemblies, TypeRecords, true);
+            loader.AfterLoad += (record, loaded) => v.Append(appendString);
+
+            var noCtor = loader.Load<SimpleTestBase>("A");
+            Assert.IsTrue(noCtor.GetType().FullName.Contains("SimpleTestB"));
+            Assert.AreEqual(0, noCtor.Value);
+
+            Assert.AreEqual(appendString, v.ToString(), "AfterLoad did not fire.");
+        }
     }
 }

@@ -7,6 +7,8 @@ using Common.Logging;
 
 namespace Exor.Core
 {
+    public delegate void ExtensionLoaderFilter(ExtensionTypeRecord typeRecord, Object loaded);
+
     /// <summary>
     /// Reflection-based loader that scans a set of supplied assemblies for extension classes tagged
     /// with a specified attribute and key nane.
@@ -23,6 +25,8 @@ namespace Exor.Core
         private readonly Dictionary<TypeInfo, ExtensionTypeRecord> _typeRecords;
         private readonly Dictionary<Type, ExtensionTypeRecord> _attributeMap; 
         public IEnumerable<Type> SupportedTypes { get { return _typeRecords.Values.Select(etr => etr.ExtensionType); } }
+
+        public event ExtensionLoaderFilter AfterLoad;
 
         private readonly Dictionary<TypeInfo, Dictionary<String, List<ConstructorInfo>>> _lookupTable;
         private readonly bool _throwIfConstructorMissing;
@@ -245,10 +249,13 @@ namespace Exor.Core
         public TExtensionType Load<TExtensionType>(String key, params Object[] args)
             where TExtensionType : class
         {
-            EnsureArgTypes<TExtensionType>(args);
+            var record = EnsureArgTypes<TExtensionType>(args);
 
             var ctor = FindConstructor<TExtensionType>(key);
-            return (TExtensionType) ctor.Invoke(args);
+            var obj = (TExtensionType) ctor.Invoke(args);
+            AfterLoad?.Invoke(record, obj);
+
+            return obj;
         }
 
         /// <summary>
@@ -261,10 +268,15 @@ namespace Exor.Core
         public IEnumerable<TExtensionType> DeepLoad<TExtensionType>(String key, params Object[] args)
             where TExtensionType : class
         {
-            EnsureArgTypes<TExtensionType>(args);
+            var record = EnsureArgTypes<TExtensionType>(args);
 
             var ctors = DeepFindConstructor<TExtensionType>(key);
-            return ctors.Select(ctor => (TExtensionType) ctor.Invoke(args));
+            return ctors.Select(ctor =>
+            {
+                var obj = (TExtensionType) ctor.Invoke(args);
+                AfterLoad?.Invoke(record, obj);
+                return obj;
+            });
         }
 
         /// <summary>
@@ -283,10 +295,15 @@ namespace Exor.Core
         public IReadOnlyDictionary<String, TExtensionType> LoadAll<TExtensionType>(params Object[] args)
             where TExtensionType : class
         {
-            EnsureArgTypes<TExtensionType>(args);
+            var record = EnsureArgTypes<TExtensionType>(args);
 
             var ctors = FindAllConstructors<TExtensionType>();
-            return ctors.ToDictionary(kvp => kvp.Key, kvp => (TExtensionType)kvp.Value.Invoke(args));
+            return ctors.ToDictionary(kvp => kvp.Key, kvp =>
+            {
+                var obj = (TExtensionType) kvp.Value.Invoke(args);
+                AfterLoad?.Invoke(record, obj);
+                return obj;
+            });
         }
 
         public IReadOnlyDictionary<String, IReadOnlyList<TExtensionType>> DeepLoadAll<TExtensionType>(params Object[] args)
@@ -304,7 +321,7 @@ namespace Exor.Core
             return dict;
         }
 
-        private void EnsureArgTypes<TExtensionType>(IEnumerable<Object> args)
+        private ExtensionTypeRecord EnsureArgTypes<TExtensionType>(IEnumerable<Object> args)
             where TExtensionType : class
         {
             var argTypes = args.Select(o => o.GetType()).ToList();
@@ -317,6 +334,8 @@ namespace Exor.Core
                                                     String.Join(", ", etr.ConstructorParametersArray.Select(t => t.FullName)),
                                                     String.Join(", ", argTypes.Select(t => t.FullName)));
             }
+
+            return etr;
         }
     }
 }

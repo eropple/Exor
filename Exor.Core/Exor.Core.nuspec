@@ -20,6 +20,7 @@
         those subtypes loaded in response to a string-based attribute key.
     </description>
     <releaseNotes>
+2.0.0-pre4: Added "AfterLoad" event to ExtensionLoader. This event is fired for every object created via Load, DeepLoad, or LoadAll, providing the object's ExtensionTypeRecord as well as the object itself for filtering.
 2.0.0-pre3: Minor API changes to support an update to Common.Logging 3.0.0-alpha. ExtensionLoader now requires you to pass into it an ILog.
 1.0.0: Initial release.
     </releaseNotes>
